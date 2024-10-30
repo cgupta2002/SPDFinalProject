@@ -11,19 +11,19 @@ INSERT INTO Users (user_id, name, email, password, profile_image, location) VALU
 (1, 'John Doe', 'johndoe@example.com', 'hashed_password_1', '/images/johndoe.jpg', 'New York, NY'),
 (2, 'Jane Smith', 'janesmith@example.com', 'hashed_password_2', '/images/janesmith.jpg', 'Los Angeles, CA');
 
-CREATE TABLE Resources (
-    resource_id INTEGER PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE Tools (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
     title TEXT NOT NULL,
     description TEXT,
-    images TEXT,
+    imgPath TEXT,
     category TEXT,
     availability TEXT,
-    date_posted TEXT NOT NULL,
+    datePosted TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
-INSERT INTO Resources (resource_id, user_id, title, description, images, category, availability, date_posted) VALUES
+INSERT INTO Tools (id, user_id, title, description, imgPath, category, availability, datePosted) VALUES
 (1, 1, 'Vintage Radio', 'A well-preserved vintage radio from the 1970s', '/images/listing1.jpg', 'Electronics', 'available', '2023-01-11'),
 (2, 2, 'Gardening Tools', 'Set of basic gardening tools, barely used', '/images/listing2.jpg', 'Gardening', 'available', '2023-01-06');
 
@@ -49,7 +49,7 @@ CREATE TABLE Reviews (
     comment TEXT,
     timestamp TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (reviewer_id) REFERENCES Users(user_id)
+    FOREIGN KEY (reviewer_id) REFERENCES Users(id)
 );
 
 INSERT INTO Reviews (review_id, user_id, reviewer_id, rating, comment, timestamp) VALUES
