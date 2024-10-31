@@ -69,7 +69,7 @@ class Tool:
     def addTool(cls, id, userID, title, desc, imgPath, category, availability, datePosted):
         conn = None
         conn = sqlite3.connect( "database.db")
-        sql='INSERT INTO projects (id, user_id, title, description, imgPath, category, availability, datePosted) values (?,?,?,?,?,?,?,?)'
+        sql='INSERT INTO tools (id, user_id, title, description, imgPath, category, availability, datePosted) values (?,?,?,?,?,?,?,?)'
         cur = conn.cursor()
         cur.execute(sql, (title, id, userID, title, desc, imgPath, category, availability, datePosted, ))
         conn.commit()
@@ -80,7 +80,7 @@ class Tool:
     def updateTool(cls, title, desc, imgPath, category, availability, datePosted):
         conn = None
         conn = sqlite3.connect('database.db')
-        sql='UPDATE projects SET title=?, description=?, imgPath=?, category=?, availability=?, datePosted = ? WHERE id = ?'
+        sql='UPDATE tools SET title=?, description=?, imgPath=?, category=?, availability=?, datePosted = ? WHERE id = ?'
         cur = conn.cursor()
         cur.execute(sql, (title, desc, imgPath, category, availability, datePosted,id,))
         conn.commit()
