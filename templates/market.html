@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
-{% block title %} Home {% endblock %}
+{% block title %} Marketplace {% endblock %}
 {% block content%}
 <main class="d-inline-flex p-5 align-items-end">
     <div class="container">
         <div class="row">
             <p> Hello World!</p>
+            <a href="{{url_for('add_tool')}}">
+                <button class="btn btn-primary">Add Listing</button>
+            </a>
         </div>
     </div>
 </main>
