@@ -17,7 +17,13 @@ def market():
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    user_id = session.get('user_id')
+    if user_id is None:
+        flash('You must be logged in to access this page.', 'error')
+        return redirect(url_for('login'))
+    user = User.getUserByID(user_id)
+    username = user[1]
+    return render_template('profile.html', username=username, user_id=user_id)
 
 @app.route('/messages')
 def message():
@@ -47,13 +53,47 @@ def registration():
         lname = request.form['lname']
         email = request.form['email']
         password = request.form['password']
-        profile_image = request.form['profile_picture']
+        profile_image = request.form['profile_image']
         location = request.form['location']
 
         if not username or not password or not fname or not lname or not email or not location:
             flash('All required fields must be filled out.', 'error')
+            return redirect(url_for('registration'))
         else:
-            name = str(fname) + str(lname)
+            name = str(fname) +' '+ str(lname)
             User.addUser(user_id, username, name, email, password, profile_image, location)
             return redirect(url_for('index'))
     
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        if not username or not password:
+            flash('Username and Password are required.', 'error')
+            return redirect(url_for('login'))
+        
+        user = User.getUser(username)
+                
+        if user is None:
+            flash('Invalid Username. Register for free!', 'error')
+            return redirect(url_for('registration'))
+        elif user[2] != password:
+            flash('Incorrect Password.', 'error')
+            return redirect(url_for('login'))
+        else:
+            session['user_id'] = user[0]
+            flash('Login successful.', 'success')
+            return redirect(url_for('index', user=user))
+    if request.method == 'GET':
+        return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    flash('Logged out successfully.', 'success')
+    return redirect(url_for('index'))
+
+        
+

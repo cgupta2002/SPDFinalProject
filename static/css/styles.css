@@ -5,10 +5,24 @@ body{
 
 label.a{
     padding:3px;
+    display: inline-block;
 }
 
 input.a{
     width: 200px;
     padding:1px;
-    margin:3px;
+}
+
+a.a{
+    color: red;
+    text-decoration: none;    
+}
+a.a:hover{
+    color:red;
+}
+
+br.a {
+    display: block;
+    content:'';
+    margin-top:5px;
 }
