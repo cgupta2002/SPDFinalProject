@@ -107,22 +107,16 @@ class User:
         return ListOfDictionaries
     
     def getUser(username):
-        conn = sqlite3.connect('database.db')
-        cursorObj = conn.cursor()
-        sql='SELECT user_id, username, password FROM users WHERE username=?'
-        cursorObj.execute(sql, (username,))
-        user = cursorObj.fetchone()
-        conn.close()
-        return user
+        users = User.getAllUsers()
+        for user in users:
+            if user['username'] == username:
+                return user
     
-    def getUserByID(cls,user_id):
-        conn = sqlite3.connect('database.db')
-        cursorObj = conn.cursor()
-        sql='SELECT user_id, username, password FROM users WHERE user_id=?'
-        cursorObj.execute(sql, (user_id,))
-        user = cursorObj.fetchone()
-        conn.close()
-        return user
+    def getUserByID(user_id):
+        users = User.getAllUsers()
+        for user in users:
+            if user['user_id'] == user_id:
+                return user
     
 
 def InsertStartingData():

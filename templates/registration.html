@@ -3,7 +3,7 @@
 {% block content%}
 <main class="d-inline-flex p-5 align-items-end">
     <div class="container">
-        <form id="form" action="{{url_for('registration')}}" method="POST">
+        <form id="form" action="{{url_for('registration')}}" method="POST" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-2" style="text-align:right;">
                   <label class="a" for="username">Username<a class="a">*</a></label> <br class="a"><br class="a">
@@ -25,7 +25,7 @@
                 <input class="a" type="password" id="password" name="password" required> <br class="a"><br class="a">
                 <input class="a" type="password" id="c_password" name="c_password" required> <br class="a"><br class="a">
                 <input class="a" type="text" id="location" name="location" required> <br class="a"><br class="a">
-                <input class="a" type="file" id="profile_image" name="profile_image"> 
+                <input class="a" type="file" id="profile_image" name="profile_image" accept="image/*"> 
 
                 </div>
 

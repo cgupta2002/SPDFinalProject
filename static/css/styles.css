@@ -26,3 +26,8 @@ br.a {
     content:'';
     margin-top:5px;
 }
+.ml-auto .dropdown-menu {
+    left: auto !important;
+    right: 0px;
+}
+

@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% block title %} Add Tool {% endblock %}
 {% block content%}
+{% if user_id %}
 <main class="d-inline-flex p-5 align-items-end">
     <div class="container">
         <form id="form" action="{{url_for('add_tool')}}" method="POST">
             <div class="row">
                 <div class="col-2" style="text-align:right;">
-                  <label class="a" for="title">Project Name:</label> <br>
+                  <label class="a" for="title">Resource Name:</label> <br>
                   <label class="a" for="affiliation">Company / Affiliation:</label><br>
                   <label class="a" for="timeline">Year of Completion:</label><br>
                   <label class="a" for="link">Project Link (Optional):</label><br>
@@ -31,8 +32,17 @@
   
   
             </form>
+            <p>{{user[3]}}</p>
   
     </div>
 </main>
+{% else %}
+<main class="d-inline-flex p-5 align-items-end">
+  <div class="container">
+    <h2> You must be logged in to view this page.</h2>
 
+
+  </div>
+</main>
+{% endif %}
 {% endblock %}
