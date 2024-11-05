@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
-{% block title %} Home {% endblock %}
-{% block content%}
-<main class="d-inline-flex p-5 align-items-end">
-    <div class="container">
-        <div class="row">
-            <p> Hello World!</p>
-        </div>
-    </div>
+{% block title %}Messages{% endblock %}
+{% block content %}
+<main class="container p-5">
+    <h2>Conversations</h2>
+    <ul class="list-group">
+        {% for conversation in conversations %}
+        <li class="list-group-item">
+            <a href="{{ url_for('conversation', other_user_id=conversation.user_id) }}">
+                {{ conversation.name }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
 </main>
-
 {% endblock %}
