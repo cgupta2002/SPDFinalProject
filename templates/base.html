@@ -35,10 +35,10 @@
               {%if user_id %}
               <ul class="nav navbar-nav ms-auto">
                 <li class="nav-item">
-                  {% if profile_image %}
+                  {% if user['profile_image'] %}
                   <img src="{{url_for('static', filename='images/'+user['profile_image'])}}" style="width:200px; height:relative;"> 
                   {% else %}
-                  <a class="btn btn-primary" style='padding-left:5px !important;padding-right:5px !important;margin-left:3px !important;margin-right:3px !important;' href="{{url_for('profile')}}"> {{user[1]}}</a>
+                  <a class="btn btn-primary" style='padding-left:5px !important;padding-right:5px !important;margin-left:3px !important;margin-right:3px !important;' href="{{url_for('profile')}}"> {{user['name']}}</a>
                   {% endif %}
                 </li>
                 <li class="nav-item">

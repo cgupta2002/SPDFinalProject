@@ -5,31 +5,31 @@
     <div class="container">
         <form id="form" action="{{url_for('registration')}}" method="POST" enctype="multipart/form-data">
             <div class="row">
-                <div class="col-2" style="text-align:right;">
+                <div class="col-4" style="text-align:right;">
                   <label class="a" for="username">Username<a class="a">*</a></label> <br class="a"><br class="a">
                   <label class="a" for="fname">First Name<a class="a">*</a></label><br class="a"><br class="a">
                   <label class="a" for="lname">Last Name<a class="a">*</a></label><br class="a"><br class="a">
                   <label class="a" for="email">Email<a class="a">*</a></label><br class="a"><br class="a">
-                  <label class="a" for="password">Password<a class="a">*</a></label><br class="a"><br class="a">
+                  <label class="a" for="password">Password (Minimum 8 characters)<a class="a">*</a></label><br class="a"><br class="a">
                   <label class="a" for="c_password">Confirm Password<a class="a">*</a></label><br class="a"><br class="a">
                   <label class="a" for="location">Location<a class="a">*</a></label><br class="a"><br class="a">
                   <label class="a" for="profile_image">Profile Picture</label>
-                  <p class="text-center"> <a class="a">*Required</a></p>
+                  <p class="text-right"> <a class="a">*Required</a></p>
 
                 </div>
-                <div class="col-9">
+                <div class="col-8">
                 <input class="a" type="text" id="username" name="username" required>  <br class="a"> <br class="a">
                 <input class="a" type="text" id="fname" name="fname" required><br class="a"><br class="a">
                 <input class="a" type="text" id="lname" name="lname" required> <br class="a"><br class="a">
                 <input class="a" type="email" id="email" name="email" pattern='+@+.+' required>  <br class="a"><br class="a">
-                <input class="a" type="password" id="password" name="password" required> <br class="a"><br class="a">
+                <input class="a" type="password" id="password" name="password" minlength=8 required> <br class="a"><br class="a">
                 <input class="a" type="password" id="c_password" name="c_password" required> <br class="a"><br class="a">
                 <input class="a" type="text" id="location" name="location" required> <br class="a"><br class="a">
                 <input class="a" type="file" id="profile_image" name="profile_image" accept="image/*"> 
 
                 </div>
 
-              <div class="col-5 text-center">
+              <div class="col-8 text-center">
                 <button class="btn btn-primary" type='submit' value="submit" onclick="return validatePassword()">Submit </button>
                 <button class='btn btn-danger' type="reset" value="Reset">Reset</button>
 

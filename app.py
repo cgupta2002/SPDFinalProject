@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, request, redirect, flash, ses
 from tools import Tool
 from reviews import Review
 from users import User
-from messages import Message
+from messages import Message, Conversation
 from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
@@ -43,53 +43,53 @@ def message():
     user_id = session.get('user_id')
     if not user_id:
         return redirect(url_for('login'))
-
-    cursor = cursor()
-    cursor.execute("""
-        SELECT DISTINCT u.user_id, u.name
-        FROM Users u
-        JOIN Messages m ON (u.user_id = m.sender_id OR u.user_id = m.receiver_id)
-        WHERE (m.sender_id = ? OR m.receiver_id = ?) AND u.user_id != ?
-    """, (user_id, user_id, user_id))
-    conversations = cursor.fetchall()
-
-    return render_template('messages.html', conversations=conversations)
+    else:
+        conversations = Conversation.get_user_conversations(user_id)
+        conversation_list = []
+        for conversation in conversations:
+            messages = Conversation.get_conversation_messages(conversation[0])
+            conversation_list.append(messages)
+        user = User.getUserByID(user_id)
+        users = User.getAllUsers()
+        return render_template('message.html', conversation_list=conversation_list, users=users, user=user, user_id=user_id)
 
 
-@app.route('/messages/<int:other_user_id>')
-def conversation(other_user_id):
+@app.route('/messages/<int:conversation_id>', methods=['GET', 'POST'])
+def conversation(conversation_id=None):
     user_id = session.get('user_id')
-    if not user_id:
-        return redirect(url_for('login'))
+    user = User.getUserByID(user_id)
+    convo = Conversation.get_all_conversation_messages(conversation_id)
+    receiver = User.getName(convo[0]['receiver_id'])
+    receiver_id = convo[0]['receiver_id']
+    return render_template('conversation.html', user_id = user_id, user=user,conversation_id=conversation_id, convo=convo, receiver_id=receiver_id,receiver=receiver)
+        
+    
 
-    cursor = cursor()
-    cursor.execute("""
-        SELECT m.*, u.name as sender_name
-        FROM Messages m
-        JOIN Users u ON m.sender_id = u.user_id
-        WHERE (m.sender_id = ? AND m.receiver_id = ?)
-           OR (m.sender_id = ? AND m.receiver_id = ?)
-        ORDER BY m.timestamp
-    """, (user_id, other_user_id, other_user_id, user_id))
-    messages = cursor.fetchall()
+@app.route('/new_message', methods=['GET', 'POST'])
+def new_conversation():
+    sender_id = session.get('user_id')
+    user = User.getUserByID(sender_id)
+    users = User.getAllUsers()
+    if request.method == 'GET':
+        return render_template('new_message.html', sender_id = sender_id, user=user, users=users)
+    elif request.method == 'POST':
+        recipient_id = request.form['recipient_id']
+        content = request.form['content']
+        timestamp = datetime.now()
+        conversation_id = Conversation.create_conversation(sender_id, recipient_id)     
+        Conversation.insert_message(conversation_id,sender_id, recipient_id, content, timestamp)   
+        return redirect(url_for('message'))
 
-    # Get the other user's name for display
-    cursor.execute("SELECT name FROM Users WHERE user_id = ?", (other_user_id,))
-    other_user = cursor.fetchone()
 
-    return render_template('conversation.html', messages=messages, other_user=other_user)
-
-@app.route('/send_message/<int:receiver_id>', methods=['POST'])
-def send_message(receiver_id):
+@app.route('/send_message/<int:conversation_id>', methods=['POST'])
+def send_message(conversation_id=None):
     sender_id = session.get('user_id')
     content = request.form['content']
-    timestamp = datetime.now()
-
-    cursor = cursor()
-    cursor.execute("INSERT INTO Messages (sender_id, receiver_id, content, timestamp) VALUES (?, ?, ?, ?)",
-                   (sender_id, receiver_id, content, timestamp))
-
-    return redirect(url_for('conversation', other_user_id=receiver_id))
+    convo = Conversation.get_conversation_messages(conversation_id)
+    receiver_id = convo['receiver_id']
+    print(convo)
+    Conversation.insert_message(conversation_id, sender_id, receiver_id,content, timestamp=datetime.now())
+    return redirect(url_for('conversation', conversation_id=conversation_id))
 
 
 @app.route('/marketplace/add', methods=['GET', 'POST'])
@@ -120,7 +120,7 @@ def registration():
         password = request.form['password']
         profile_image = request.files['profile_image']
         location = request.form['location']
-
+        name = (str(fname) +' '+ str(lname)).title()
         if profile_image and allowed_file(profile_image.filename):
             filename = secure_filename(profile_image.filename)
             filepath = filename
@@ -130,12 +130,11 @@ def registration():
                 flash('All required fields must be filled out.', 'error')
                 return redirect(url_for('registration'))
             else:
-                name = str(fname) +' '+ str(lname)
+                
                 User.addUser(user_id, username, name, email, password, filepath, location)
                 user = User.getUserByID(user_id)
                 return redirect(url_for('index', user_id=user_id, user=user))
         elif not profile_image:
-            name = str(fname) +' '+ str(lname)
             User.addUserNoPic(user_id, username, name, email, password, location)
             user = User.getUserByID(user_id)
             return redirect(url_for('index', user_id=user_id, user=user))
@@ -167,7 +166,7 @@ def login():
             session['user_id'] = user['user_id']
             flash('Login successful.', 'success')
             user_id = user['user_id']
-            return redirect(url_for('index', user_id=user_id, user=user))
+            return redirect(url_for('index', user_id=user_id, user=user, profile_image = user['profile_image']))
     if request.method == 'GET':
         return render_template('login.html')
 

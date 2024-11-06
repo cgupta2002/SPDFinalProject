@@ -4,13 +4,27 @@
 <main class="container p-5">
     <h2>Conversations</h2>
     <ul class="list-group">
-        {% for conversation in conversations %}
-        <li class="list-group-item">
-            <a href="{{ url_for('conversation', other_user_id=conversation.user_id) }}">
-                {{ conversation.name }}
-            </a>
-        </li>
-        {% endfor %}
+        {% if conversation_list %}
+            {% for conversation in conversation_list %}
+            <li class="list-group-item">
+                <a href="{{ url_for('conversation', conversation_id=conversation['conversation_id']) }}">
+                    {% for user in users %}
+                        {% if user['user_id'] == conversation['receiver_id']%}
+                            Conversation with {{user['name']}}
+                            
+                        {% endif%}
+                    {% endfor %}
+                </a>
+                <p>
+                    {{conversation['content']}}
+                </p>
+            </li>
+            {% endfor %}
+        {% else %}
+        {% endif %}
+        <a href="{{url_for('new_conversation')}}">
+            <button class="btn btn-primary">Create Message</button>
+        </a>
     </ul>
 </main>
 {% endblock %}

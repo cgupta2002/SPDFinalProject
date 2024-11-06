@@ -128,6 +128,13 @@ class User:
         for user in users:
             if user['user_id'] == user_id:
                 return user
+            
+    @classmethod
+    def getName(cls, user_id):
+        users = User.getAllUsers()
+        for user in users:
+            if user['user_id'] == user_id:
+                return user['name']
     
 
 def InsertStartingData():
@@ -149,6 +156,8 @@ def createUserTable():
 
 
 if __name__ == '__main__':
+    createUserTable()
+    InsertStartingData()
     print(User.getAllUsers())
 
 
