@@ -5,6 +5,7 @@ from users import User
 from messages import Message
 from werkzeug.utils import secure_filename
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = '2bshd9ei3nd40fk'
@@ -13,8 +14,6 @@ app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
-
-
 
 @app.route("/")
 def index():
@@ -38,10 +37,60 @@ def profile():
     user = User.getUserByID(user_id)
     return render_template('profile.html', user=user, user_id=user_id)
 
+
 @app.route('/messages')
 def message():
     user_id = session.get('user_id')
-    return render_template('message.html', user_id=user_id)
+    if not user_id:
+        return redirect(url_for('login'))
+
+    cursor = cursor()
+    cursor.execute("""
+        SELECT DISTINCT u.user_id, u.name
+        FROM Users u
+        JOIN Messages m ON (u.user_id = m.sender_id OR u.user_id = m.receiver_id)
+        WHERE (m.sender_id = ? OR m.receiver_id = ?) AND u.user_id != ?
+    """, (user_id, user_id, user_id))
+    conversations = cursor.fetchall()
+
+    return render_template('messages.html', conversations=conversations)
+
+
+@app.route('/messages/<int:other_user_id>')
+def conversation(other_user_id):
+    user_id = session.get('user_id')
+    if not user_id:
+        return redirect(url_for('login'))
+
+    cursor = cursor()
+    cursor.execute("""
+        SELECT m.*, u.name as sender_name
+        FROM Messages m
+        JOIN Users u ON m.sender_id = u.user_id
+        WHERE (m.sender_id = ? AND m.receiver_id = ?)
+           OR (m.sender_id = ? AND m.receiver_id = ?)
+        ORDER BY m.timestamp
+    """, (user_id, other_user_id, other_user_id, user_id))
+    messages = cursor.fetchall()
+
+    # Get the other user's name for display
+    cursor.execute("SELECT name FROM Users WHERE user_id = ?", (other_user_id,))
+    other_user = cursor.fetchone()
+
+    return render_template('conversation.html', messages=messages, other_user=other_user)
+
+@app.route('/send_message/<int:receiver_id>', methods=['POST'])
+def send_message(receiver_id):
+    sender_id = session.get('user_id')
+    content = request.form['content']
+    timestamp = datetime.now()
+
+    cursor = cursor()
+    cursor.execute("INSERT INTO Messages (sender_id, receiver_id, content, timestamp) VALUES (?, ?, ?, ?)",
+                   (sender_id, receiver_id, content, timestamp))
+
+    return redirect(url_for('conversation', other_user_id=receiver_id))
+
 
 @app.route('/marketplace/add', methods=['GET', 'POST'])
 def add_tool():
@@ -57,9 +106,9 @@ def add_tool():
 
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
-    user_id = session.get('user_id')
     if request.method == 'GET':
         return render_template('registration.html')
+    
     elif request.method == 'POST':
         users = User.getAllUsers()
         last_id = int(users[-1]['user_id'])
@@ -84,8 +133,12 @@ def registration():
                 name = str(fname) +' '+ str(lname)
                 User.addUser(user_id, username, name, email, password, filepath, location)
                 user = User.getUserByID(user_id)
-                print(user)
                 return redirect(url_for('index', user_id=user_id, user=user))
+        elif not profile_image:
+            name = str(fname) +' '+ str(lname)
+            User.addUserNoPic(user_id, username, name, email, password, location)
+            user = User.getUserByID(user_id)
+            return redirect(url_for('index', user_id=user_id, user=user))
         else:
             flash('Invalid file format. Please upload an image.')
             return redirect(url_for('registration'))
@@ -114,7 +167,6 @@ def login():
             session['user_id'] = user['user_id']
             flash('Login successful.', 'success')
             user_id = user['user_id']
-            print(user['profile_image'])
             return redirect(url_for('index', user_id=user_id, user=user))
     if request.method == 'GET':
         return render_template('login.html')

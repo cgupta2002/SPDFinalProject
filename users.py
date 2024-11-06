@@ -83,6 +83,17 @@ class User:
             conn.close()
 
     @classmethod
+    def addUserNoPic(cls, user_id, username, name, email, password, location):
+        conn = None
+        conn = sqlite3.connect( "database.db")
+        sql='INSERT INTO users ( user_id,username, name, email, password, location) values (?,?,?,?,?,?)'
+        cur = conn.cursor()
+        cur.execute(sql, ( user_id, username,name, email, password, location,))
+        conn.commit()
+        if conn:
+            conn.close()
+
+    @classmethod
     def updateUser(cls,  user_id, username, name, email, password, profile_image, location):
         conn = None
         conn = sqlite3.connect('database.db')
@@ -138,8 +149,6 @@ def createUserTable():
 
 
 if __name__ == '__main__':
-    createUserTable()
-    InsertStartingData()
     print(User.getAllUsers())
 
 
