@@ -100,14 +100,25 @@ class Tool:
             conn.close()
         return ListOfDictionaries
     
+    @classmethod
+    def getTool(cls,tool_id):
+        conn = sqlite3.connect('database.db')
+        cursorObj = conn.cursor()
+        cursorObj.execute('SELECT id, user_id, title, description, imgPath, category, availability, datePosted FROM tools WHERE id=?;',(tool_id,))
+        allRows = cursorObj.fetchone()
+        m = {"id" : allRows[0], "user_id": allRows[1], "title":allRows[2], 'description': allRows[3], 'imgPath':allRows[4], 'category':allRows[5], 'availability':allRows[6], 'datePosted':allRows[7] }
+        if conn:
+            conn.close()
+        return m
+    
     
 
 def InsertStartingData():
     conn = sqlite3.connect('database.db')
     cur = conn.cursor()
     tool_data = [
-        (1, 1, 'Vintage Radio', 'A well-preserved vintage radio from the 1970s', '/images/listing1.jpg', 'Electronics', 'available', '2023-01-11'),
-        (2, 2, 'Gardening Tools', 'Set of basic gardening tools, barely used', '/images/listing2.jpg', 'Gardening', 'available', '2023-01-06')]
+        (1, 1, 'Vintage Radio', 'A well-preserved vintage radio from the 1970s', None, 'Electronics', 'available', '2023-01-11'),
+        (2, 2, 'Gardening Tools', 'Set of basic gardening tools, barely used', None, 'Gardening', 'available', '2023-01-06')]
     cur.executemany('''INSERT INTO tools (id, user_id, title, description, imgPath, category, availability, datePosted) VALUES (?, ?, ?, ?, ?, ?, ?, ?)''', tool_data)
     conn.commit()
     conn.close()

@@ -4,6 +4,9 @@
 <main class="d-inline-flex p-5 align-items-end">
     <div class="container">
         <form id="form" action="{{url_for('login')}}" method="POST">
+          {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
             <div class="row">
                 <div class="col-2" style="text-align:right;">
                   <label class="a" for="username">Username</label> <br class="a"><br class="a">
@@ -16,7 +19,7 @@
                 </div>
 
               <div class="col-5 text-center">
-                <button class="btn btn-primary" type='submit' value="submit">Submit </button>
+                <button class="btn btn-primary" type='submit' onclick="return validateLogin()" value="submit">Submit </button>
                 <button class='btn btn-danger' type="reset" value="Reset">Reset</button>
 
               </div>
@@ -25,6 +28,38 @@
   
   
             </form>
+            <script>
+              // Retrieve users data from the data attribute
+              const usersData = document.getElementById('usersData').dataset.users;
+              const users = JSON.parse(usersData);
+      
+              // Function to validate credentials
+              function validateCredentials(username, password) {
+                  // Find the user by username
+                  const user = users.find(user => user.username === username);
+                  if (user && user.password === password) {
+                      return true;  // Credentials match
+                  }
+                  return false;  // No matching user or password
+              }
+      
+              // Handle form submission
+              document.getElementById('loginForm').addEventListener('submit', function(event) {
+                  event.preventDefault();  // Prevent form from submitting normally
+      
+                  const username = document.getElementById('username').value;
+                  const password = document.getElementById('password').value;
+      
+                  if (validateCredentials(username, password)) {
+                      alert('Login successful');
+                  } else {
+                      alert('Invalid username or password');
+                  }
+              });
+          </script>
+      
+          <!-- Store users' data in a hidden div data attribute -->
+          <div id="usersData" data-users="{{ users | tojson }}"></div>
     </div>
 </main>
 

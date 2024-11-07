@@ -5,6 +5,28 @@
     <div class="container">
         <div class="row">
             <p> Hello World!</p>
+            {% for tool in tools %}
+            <div class="col-md-4 mb-4">
+                <a href="{{ url_for('tool', tool_id=tool.id) }}" class="text-decoration-none text-dark">
+                <div class="card h-100">
+                    {% if tool.imgPath %}
+                    <img src="{{ tool.imgPath }}" class="card-img-top" alt="{{ tool.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ tool.title }}</h5>
+                        <p class="card-text">
+                            <strong>Category:</strong> {{ tool.category }}<br>
+                            <strong>Availability:</strong> {{ tool.availability }}<br>
+                            <strong>Date Posted:</strong> {{ tool.datePosted }}
+                        </p>
+                        <p class="card-text">
+                            {{ tool.description}}
+                        </p>
+                    </div>
+                </div>
+            </a>
+            </div>
+            {% endfor %}
             <a href="{{url_for('add_tool')}}">
                 <button class="btn btn-primary">Add Listing</button>
             </a>

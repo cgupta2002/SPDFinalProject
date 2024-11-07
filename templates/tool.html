@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %} {{tool.title}} - Tool Details{% endblock %}
+{% block content%}
+<main class="d-inline-flex p-5 align-items-end">
+    <div class="container mt-5">
+        <div class="card">
+            {% if tool.imgPath %}
+            <img src="{{ tool.imgPath }}" class="card-img-top" alt="{{ tool.title }}">
+            {% endif %}
+            <div class="card-body">
+                <h2 class="card-title">{{ tool.title }}</h2>
+                <p class="card-text"><strong>Category:</strong> {{ tool.category }}</p>
+                <p class="card-text"><strong>Availability:</strong> {{ tool.availability }}</p>
+                <p class="card-text"><strong>Date Posted:</strong> {{ tool.datePosted }}</p>
+                <p class="card-text"><strong>Description:</strong> {{ tool.description }}</p>
+                <p class="card-text"><strong>Seller:</strong> {{ seller.name }}</p>
+
+            </div>
+        </div>
+        <div class="mt-4">
+            <a href="{{ url_for('market') }}" class="btn btn-secondary">Back to Marketplace</a>
+        
+        <a href="{{url_for('new_conversation')}}">
+            <button class="btn btn-primary">Send a Message</button>
+        </a>
+    </div>
+    </div>
+</main>
+
+{% endblock %}

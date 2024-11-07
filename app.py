@@ -25,7 +25,30 @@ def index():
 def market():
     user_id = session.get('user_id')
     user = User.getUserByID(user_id)
-    return render_template('market.html', user_id=user_id, user=user)
+    tools = Tool.getAllTools()
+    return render_template('market.html', user_id=user_id, user=user, tools=tools)
+
+@app.route('/marketplace/add', methods=['GET', 'POST'])
+def add_tool():
+    user_id = session.get('user_id')
+    if request.method == 'GET':
+
+        return render_template('add_tool.html', user_id=user_id, user=User.getUserByID(user_id))
+    elif request.method == 'POST':
+        tools = Tool.getAllTools()
+        last_id = tools[-1]['id']
+        
+        return render_template('market.html')
+    
+@app.route('/marketplace/<int:tool_id>')
+def tool(tool_id=None):
+    user_id = session.get('user_id')
+    tool = Tool.getTool(tool_id)
+    user = User.getUserByID(user_id)
+    seller = tool['user_id']
+    seller_info = User.getUserByID(seller)
+    return render_template('tool.html', tool=tool, user_id=user_id, user=user, seller=seller_info)
+    
 
 @app.route('/profile')
 def profile():
@@ -95,19 +118,6 @@ def send_message(conversation_id=None):
     Conversation.insert_message(conversation_id, sender_id, receiver_id,content, timestamp=datetime.now())
     return redirect(url_for('conversation', conversation_id=conversation_id))
 
-
-@app.route('/marketplace/add', methods=['GET', 'POST'])
-def add_tool():
-    user_id = session.get('user_id')
-    if request.method == 'GET':
-
-        return render_template('add_tool.html', user_id=user_id, user=User.getUserByID(user_id))
-    elif request.method == 'POST':
-        tools = Tool.getAllTools()
-        last_id = tools[-1]['id']
-        
-        return render_template('market.html')
-
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     if request.method == 'GET':
@@ -158,21 +168,21 @@ def login():
             return redirect(url_for('login'))
         
         user = User.getUser(username)
-        user_id = user['user_id']
-                
-        if user is None:
-            flash('Invalid Username. Register for free!', 'error')
-            return redirect(url_for('registration'))
-        elif user['password'] != password:
-            flash('Incorrect Password.', 'error')
-            return redirect(url_for('login'))
-        else:
-            session['user_id'] = user['user_id']
-            flash('Login successful.', 'success')
+        if user:
             user_id = user['user_id']
-            return redirect(url_for('index', user_id=user_id, user=user, profile_image = user['profile_image']))
+            if user['password'] == password:
+                session['user_id'] = user['user_id']
+                user_id = user['user_id']
+                return redirect(url_for('index', user_id=user_id, user=user, profile_image = user['profile_image']))
+            else:
+                users = User.getAllUsers()
+                return render_template('login.html', error="Invalid password.", users=users)
+        else:
+            users= User.getAllUsers()
+            return render_template('login.html', error="User does not exist. Did you mean to register?", users=users)            
     if request.method == 'GET':
-        return render_template('login.html')
+        users = User.getAllUsers()
+        return render_template('login.html', users=users)
 
 @app.route('/logout')
 def logout():
@@ -181,5 +191,5 @@ def logout():
     return redirect(url_for('index'))
 
 
-        
+
 

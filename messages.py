@@ -177,14 +177,8 @@ def create_convo_table():
 
 
 if __name__ == '__main__':
-#    create_message_table()
-#    create_convo_table()
-#    print(Message.get_all_messages())
-#    print(Conversation.get_user_conversations(1))
-#    conn = sqlite3.connect('database.db')
-#    cursor = conn.cursor()
-#    cursor.execute('''INSERT INTO messages (conversation_id, sender_id, receiver_id, content, timestamp)
-#                               VALUES (?, ?, ?, ?, ?)''', (1, 1, 2, 'hey', datetime.now()))
-#    conn.commit()
-#    conn.close()
-    pass
+   create_message_table()
+   create_convo_table()
+   print(Message.get_all_messages())
+   print(Conversation.get_user_conversations(1))
+    
