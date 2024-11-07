@@ -9,9 +9,10 @@
             <li class="list-group-item">
                 <a href="{{ url_for('conversation', conversation_id=conversation['conversation_id']) }}">
                     {% for user in users %}
-                        {% if user['user_id'] == conversation['receiver_id']%}
-                            Conversation with {{user['name']}}
-                            
+                        {% if user['user_id'] == conversation['receiver_id'] or user['user_id'] == conversation['sender_id']%}
+                            {% if user['user_id'] != user_id%}
+                                Conversation with {{user['name']}}
+                            {% endif %}
                         {% endif%}
                     {% endfor %}
                 </a>

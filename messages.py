@@ -65,10 +65,10 @@ class Message:
     def get_all_messages(cls):
         with sqlite3.connect('database.db') as conn:
             cursor = conn.cursor()
-            cursor.execute('SELECT message_id, sender_id, receiver_id, content, timestamp FROM messages')
+            cursor.execute('SELECT conversation_id,message_id, sender_id, receiver_id, content, timestamp FROM messages')
             rows = cursor.fetchall()
-            return [{"message_id": row[0], "sender_id": row[1], "receiver_id": row[2], 
-                     "content": row[3], "timestamp": row[4]} for row in rows]
+            return [{'conversation_id': row[0],"message_id": row[1], "sender_id": row[2], "receiver_id": row[3], 
+                     "content": row[4], "timestamp": row[5]} for row in rows]
 
 
 class Conversation:
@@ -177,5 +177,14 @@ def create_convo_table():
 
 
 if __name__ == '__main__':
-   print(Message.get_all_messages())
-
+#    create_message_table()
+#    create_convo_table()
+#    print(Message.get_all_messages())
+#    print(Conversation.get_user_conversations(1))
+#    conn = sqlite3.connect('database.db')
+#    cursor = conn.cursor()
+#    cursor.execute('''INSERT INTO messages (conversation_id, sender_id, receiver_id, content, timestamp)
+#                               VALUES (?, ?, ?, ?, ?)''', (1, 1, 2, 'hey', datetime.now()))
+#    conn.commit()
+#    conn.close()
+    pass

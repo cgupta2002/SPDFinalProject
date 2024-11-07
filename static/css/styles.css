@@ -50,6 +50,8 @@ br.a {
 .message.sent {
     background-color: #e1ffc7;
     align-self: flex-end;
+    text-align: right;
+    margin-left:auto;
 }
 
 .message.received {

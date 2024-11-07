@@ -141,8 +141,8 @@ def InsertStartingData():
     conn = sqlite3.connect('database.db')
     cur = conn.cursor()
     user_data = [
-        (1, 'jdoe123','John Doe', 'johndoe@example.com', 'hashed_password_1', '/images/johndoe.jpg', 'New York, NY'),
-        (2, 'jsmith2030','Jane Smith', 'janesmith@example.com', 'hashed_password_2', '/images/janesmith.jpg', 'Los Angeles, CA')]
+        (1, 'jdoe123','John Doe', 'johndoe@example.com', 'hashed_password_1', None, 'New York, NY'),
+        (2, 'jsmith2030','Jane Smith', 'janesmith@example.com', 'hashed_password_2', None, 'Los Angeles, CA')]
     cur.executemany('''INSERT INTO Users (user_id, username, name, email, password, profile_image, location) VALUES (?, ?, ?, ?, ?, ?, ?)''', user_data)
     conn.commit()
     conn.close()

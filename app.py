@@ -50,6 +50,7 @@ def message():
             messages = Conversation.get_conversation_messages(conversation[0])
             conversation_list.append(messages)
         user = User.getUserByID(user_id)
+        print(conversation_list)
         users = User.getAllUsers()
         return render_template('message.html', conversation_list=conversation_list, users=users, user=user, user_id=user_id)
 
@@ -59,9 +60,12 @@ def conversation(conversation_id=None):
     user_id = session.get('user_id')
     user = User.getUserByID(user_id)
     convo = Conversation.get_all_conversation_messages(conversation_id)
-    receiver = User.getName(convo[0]['receiver_id'])
-    receiver_id = convo[0]['receiver_id']
-    return render_template('conversation.html', user_id = user_id, user=user,conversation_id=conversation_id, convo=convo, receiver_id=receiver_id,receiver=receiver)
+    if convo[0]['receiver_id'] == user_id:
+        receiver = User.getName(convo[0]['sender_id'])
+    else:
+        receiver = User.getName(convo[0]['receiver_id'])
+    print(convo)
+    return render_template('conversation.html', user_id = user_id, user=user,conversation_id=conversation_id, convo=convo, receiver=receiver)
         
     
 
