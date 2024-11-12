@@ -1,28 +1,62 @@
 {% extends 'base.html' %}
-{% block title %} Add Tool {% endblock %}
+{% block title %} 
+{% if tool_id %}Edit Tool {% else %}Add Tool {% endif %}{% endblock %}
 {% block content%}
-{% if user_id %}
+{% if user_id and tool_id%}
 <main class="d-inline-flex p-5 align-items-end">
     <div class="container">
-        <form id="form" action="{{url_for('add_tool')}}" method="POST">
+        <form id="form" action="{{url_for('edit_tool', tool_id = tool_id)}}" method="POST" enctype="multipart/form-data">
             <div class="row">
-                <div class="col-2" style="text-align:right;">
-                  <label class="a" for="title">Resource Name:</label> <br>
-                  <label class="a" for="affiliation">Company / Affiliation:</label><br>
-                  <label class="a" for="timeline">Year of Completion:</label><br>
-                  <label class="a" for="link">Project Link (Optional):</label><br>
-                  <label class="a" for="description">Project Description:</label><br>
-                  <label class="a" for="imgName">Image File Name (Optional):</label><br>
-                </div>
-                <div class="col-9">
-                <input class="a" type="text" id="title" name="title" required>  <br>
-                <input class="a" type="text" id="affiliation" name="affiliation" required><br>
-                <input class="a" type="text" id="timeline" name="timeline" required> <br>
-                <input class="a" type="text" id="link" name="link">  <br>
-                <input class="a" type="text" id="description" name="description"> <br>
-                <input class="a" type="text" id="imgName" name="imgName" >  
-                
-                </div>
+              <table>
+                  <tr>
+                    <th class="a"><label class="a" for="title">Resource Name<a class="a">*</a></label> <br></th>
+                    <td><input class="a" type="text" id="title" name="title" value='{{tool.title}}' required>  <br class="a"> <br class="a"></td>
+                  </tr>
+                  <tr>
+                    <th class="a"><label class="a" for="desc">Description<a class="a">*</a></label><br></th>
+                    <td><input class="a" type="text" id="desc" name="desc" value='{{tool.description}}' required><br class="a"><br class="a"></td>
+                  </tr>
+                  <tr>
+                    <th class="a">
+                      <label class="a" for="categories">Category<a class="a">*</a></label><br>
+                    </th>
+                    <td>
+                      <select id="categories" name="categories">
+                        <option value="electronics" {% if tool.category == 'electronics' %}selected{% endif %}>Electronics</option>
+                        <option value="home-appliances" {% if tool.category == 'home-appliances' %}selected{% endif %}>Home Appliances</option>
+                        <option value="furniture" {% if tool.category == 'furniture' %}selected{% endif %}>Furniture</option>
+                        <option value="clothing" {% if tool.category == 'clothing' %}selected{% endif %}>Clothing</option>
+                        <option value="hardware" {% if tool.category == 'hardware' %}selected{% endif %}>Hardware</option>
+                        <option value="sports" {% if tool.category == 'sports' %}selected{% endif %}>Sports & Outdoors</option>
+                        <option value="toys" {% if tool.category == 'toys' %}selected{% endif %}>Toys</option>
+                        <option value="automotive" {% if tool.category == 'automotive' %}selected{% endif %}>Automotive</option>
+                        <option value="books" {% if tool.category == 'books' %}selected{% endif %}>Books</option>
+                      </select>
+                  </tr>
+                  <tr>
+                    <th class="a">
+                      <label class="a" for="availability">Availability<a class="a">*</a></label><br>
+                    </th>
+                    <td>
+                      <select id="availability" name="availability">
+                        <option value="available" {% if tool.availability == 'available' %}selected{% endif %}>Available</option>
+                        <option value="in-talks" {% if tool.availability == 'in-talks' %}selected{% endif %}>In Talks</option>
+                        <option value="waiting-for-pickup" {% if tool.availability == 'waiting-for-pickup' %}selected{% endif %}>Waiting for Pickup</option>
+                        <option value="sold" {% if tool.availability == 'sold' %}selected{% endif %}>Sold</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th class="a">
+                      <label class="a" for="imgPath">Image File Name</label><br>
+                      <a class="a">*Required</a>
+                    </th>
+                    <td>
+                      <input class="a" type="file" id="imgPath" name="imgPath" accept="image/*"> 
+                    </td>
+                  </tr>
+              </table>
+
                 <div class="text-center">
                   <button class='btn btn-primary' type="submit" value="Submit">Submit</button>
                   <button class='btn btn-secondary' type="reset" value="Reset">Reset</button>
@@ -32,9 +66,77 @@
   
   
             </form>
-            <p>{{user[3]}}</p>
   
     </div>
+</main>
+  {% elif user_id %}
+  
+<main class="d-inline-flex p-5 align-items-end">
+  <div class="container">
+      <form id="form" action="{{url_for('add_tool')}}" method="POST" enctype="multipart/form-data">
+          <div class="row">
+            <table>
+                <tr>
+                  <th class="a"><label class="a" for="title">Resource Name<a class="a">*</a></label> <br></th>
+                  <td><input class="a" type="text" id="title" name="title" required>  <br class="a"> <br class="a"></td>
+                </tr>
+                <tr>
+                  <th class="a"><label class="a" for="desc">Description<a class="a">*</a></label><br></th>
+                  <td><input class="a" type="text" id="desc" name="desc" required><br class="a"><br class="a"></td>
+                </tr>
+                <tr>
+                  <th class="a">
+                    <label class="a" for="categories">Category<a class="a">*</a></label><br>
+                  </th>
+                  <td>
+                    <select id="categories" name="categories">
+                      <option value="electronics">Electronics</option>
+                      <option value="home-appliances">Home Appliances</option>
+                      <option value="furniture">Furniture</option>
+                      <option value="clothing">Clothing</option>
+                      <option value="hardware">Hardware</option>
+                      <option value="sports">Sports & Outdoors</option>
+                      <option value="toys">Toys</option>
+                      <option value="automotive">Automotive</option>
+                      <option value="books">Books</option>
+                  </select>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="a">
+                    <label class="a" for="availability">Availability<a class="a">*</a></label><br>
+                  </th>
+                  <td>
+                    <select id="availability" name="availability">
+                      <option value="available">Available</option>
+                      <option value="in-talks">In Talks</option>
+                      <option value="waiting-for-pickup">Waiting for Pickup</option>
+                      <option value="sold">Sold</option>
+                  </select>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="a">
+                    <label class="a" for="imgPath">Image File Name</label><br>
+                    <a class="a">*Required</a>
+                  </th>
+                  <td>
+                    <input class="a" type="file" id="imgPath" name="imgPath" accept="image/*"> 
+                  </td>
+                </tr>
+            </table>
+
+              <div class="text-center">
+                <button class='btn btn-primary' type="submit" value="Submit">Submit</button>
+                <button class='btn btn-secondary' type="reset" value="Reset">Reset</button>
+            </div>  
+
+            </div>
+
+
+          </form>
+
+  </div>
 </main>
 {% else %}
 <main class="d-inline-flex p-5 align-items-end">

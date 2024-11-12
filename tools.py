@@ -71,18 +71,39 @@ class Tool:
         conn = sqlite3.connect( "database.db")
         sql='INSERT INTO tools (id, user_id, title, description, imgPath, category, availability, datePosted) values (?,?,?,?,?,?,?,?)'
         cur = conn.cursor()
-        cur.execute(sql, (title, id, userID, title, desc, imgPath, category, availability, datePosted, ))
+        cur.execute(sql, (id, userID, title, desc, imgPath, category, availability, datePosted, ))
         conn.commit()
         if conn:
             conn.close()
 
     @classmethod
-    def updateTool(cls, title, desc, imgPath, category, availability, datePosted):
+    def addToolNoPic(cls, id, userID, title, desc, category, availability, datePosted):
+        conn = None
+        conn = sqlite3.connect( "database.db")
+        sql='INSERT INTO tools (id, user_id, title, description, category, availability, datePosted) values (?,?,?,?,?,?,?)'
+        cur = conn.cursor()
+        cur.execute(sql, (id, userID, title, desc, category, availability, datePosted, ))
+        conn.commit()
+        if conn:
+            conn.close()
+
+    @classmethod
+    def updateTool(cls, id, title, desc, imgPath, category, availability, datePosted):
         conn = None
         conn = sqlite3.connect('database.db')
         sql='UPDATE tools SET title=?, description=?, imgPath=?, category=?, availability=?, datePosted = ? WHERE id = ?'
         cur = conn.cursor()
         cur.execute(sql, (title, desc, imgPath, category, availability, datePosted,id,))
+        conn.commit()
+        conn.close()
+
+    @classmethod
+    def updateToolNoPic(cls, id, title, desc, category, availability, datePosted):
+        conn = None
+        conn = sqlite3.connect('database.db')
+        sql='UPDATE tools SET title=?, description=?, category=?, availability=?, datePosted = ? WHERE id = ?'
+        cur = conn.cursor()
+        cur.execute(sql, (title, desc, category, availability, datePosted,id,))
         conn.commit()
         conn.close()
 
@@ -118,7 +139,7 @@ def InsertStartingData():
     cur = conn.cursor()
     tool_data = [
         (1, 1, 'Vintage Radio', 'A well-preserved vintage radio from the 1970s', None, 'Electronics', 'available', '2023-01-11'),
-        (2, 2, 'Gardening Tools', 'Set of basic gardening tools, barely used', None, 'Gardening', 'available', '2023-01-06')]
+        (2, 2, 'Gardening Tools', 'Set of basic gardening tools, barely used', None, 'Hardware', 'available', '2023-01-06')]
     cur.executemany('''INSERT INTO tools (id, user_id, title, description, imgPath, category, availability, datePosted) VALUES (?, ?, ?, ?, ?, ?, ?, ?)''', tool_data)
     conn.commit()
     conn.close()

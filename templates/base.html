@@ -7,6 +7,7 @@
    <link rel="icon" href="{{url_for('static', filename='images/favicon.ico')}}">
    <!-- custom styles -->
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
      <link href="{{url_for('static', filename='css/styles.css')}}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous" />
     <header>
@@ -36,13 +37,13 @@
               <ul class="nav navbar-nav ms-auto">
                 <li class="nav-item">
                   {% if user['profile_image'] %}
-                  <img src="{{url_for('static', filename='images/'+user['profile_image'])}}" style="width:200px; height:relative;"> 
+                  <a href="{{url_for('profile')}}"><img src="{{url_for('static', filename='images/'+user['profile_image'])}}" class="profile-image-b" style="position: relative;right:20px;"> </a>
                   {% else %}
                   <a class="btn btn-primary" style='padding-left:5px !important;padding-right:5px !important;margin-left:3px !important;margin-right:3px !important;' href="{{url_for('profile')}}"> {{user['name']}}</a>
                   {% endif %}
                 </li>
                 <li class="nav-item">
-                  <a class="btn btn-primary" style='padding-left:5px !important;padding-right:5px !important;margin-left:3px !important;margin-right:3px !important;'href="{{url_for('logout')}}"> Log Out</a>
+                  <a class="btn btn-primary" style='padding-left:5px !important;padding-right:5px !important;margin-left:3px !important;margin-right:3px !important;position:relative; top:5px;'href="{{url_for('logout')}}"> Log Out</a>
                 </li>
               </ul>
             {% else %}
@@ -66,7 +67,7 @@
 <body class="d-flex flex-column">
         {% block content %} {% endblock %}
     <footer class="footer mt-auto py-3 bg-light fixed-bottom">
-        <div class="container">
+        <div class="container.b">
           <span class="text-muted"> <i>Team Joy (Chirayu Gupta, Anitha Sharma, Joe Utagawa, Elizabeth Lara) &copy; 2024 </i></span>
       </div>
       </footer>

@@ -94,12 +94,20 @@ class User:
             conn.close()
 
     @classmethod
-    def updateUser(cls,  user_id, username, name, email, password, profile_image, location):
-        conn = None
+    def updateUser(cls,  user_id, email, password, location):
         conn = sqlite3.connect('database.db')
-        sql='UPDATE users SET username=?, name=?, email=?, password=?, profile_image=?, location = ? WHERE user_id = ?'
+        sql='UPDATE users SET email=?, password=?, location = ? WHERE user_id = ?'
         cur = conn.cursor()
-        cur.execute(sql, (username, name, email, password, profile_image, location, user_id,))
+        cur.execute(sql, (email, password,  location, user_id,))
+        conn.commit()
+        conn.close()
+
+    @classmethod
+    def updateImage(cls, user_id, profile_image):
+        conn = sqlite3.connect('database.db')
+        sql='UPDATE users SET profile_image=? WHERE user_id = ?'
+        cur = conn.cursor()
+        cur.execute(sql, (profile_image, user_id,))
         conn.commit()
         conn.close()
 
@@ -156,8 +164,8 @@ def createUserTable():
 
 
 if __name__ == '__main__':
-    createUserTable()
-    InsertStartingData()
+    # createUserTable()
+    # InsertStartingData()
     print(User.getAllUsers())
 
 

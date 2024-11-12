@@ -1,12 +1,111 @@
 {% extends 'base.html' %}
 {% block title %} Home {% endblock %}
 {% block content%}
+{% if viewed %}
 <main class="d-inline-flex p-5 align-items-end">
     <div class="container">
         <div class="row">
-            <p> Hello World!</p>
+            <p> {{viewed['name']}}</p>
+            <div class="rating">
+                {% if ratings %}
+    {% for i in range(1, 6) %}
+        {% if avg_rating >= i %}
+            <i class="fas fa-star"></i>
+        {% elif avg_rating > i - 1 %}
+            <i class="fas fa-star-half-alt"></i> 
+        {% else %}
+            <i class="far fa-star"></i>
+        {% endif %}
+    {% endfor %}<br>
+    <span> {{ avg_rating | round(1) }} / 5</span>
+            </div>
+            {% endif %}
+            <div class="container">
+                <div class="row">
+                    <p> <b>Email:</b>{{user['email']}} </p> 
+                </div>
+                <div class="row">
+                    <p><b>Location:</b> {{user['location']}}</p>
+                </div>
+            </div>  
         </div>
     </div>
 </main>
 
+{% else %}
+<main class="d-inline-flex p-5 align-items-end">
+    <div class="container">
+        <div  class="row">
+            {% if user['profile_image']%}
+            <div class="profile-card">
+                <div class="profile-image-container">
+                    <img src="{{url_for('static', filename='images/'+user['profile_image'])}}" alt="Profile Image" class="profile-image">
+                </div>
+                <div class="profile-info">
+                    <h2>{{user['name']}}</h2>
+                    
+                    <div class="rating">
+                        {% if ratings %}
+                        {% for i in range(1, 6) %}
+                            {% if avg_rating >= i %}
+                                <i class="fas fa-star"></i>
+                            {% elif avg_rating > i - 1 %}
+                                <i class="fas fa-star-half-alt"></i> 
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}<br>
+                        <span> {{ avg_rating | round(1) }} / 5</span>
+                        {% endif %}
+                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <p> <b>Email:</b>{{user['email']}} </p> 
+                                    </div>
+                                    <div class="row">
+                                        <p><b>Location:</b> {{user['location']}}</p>
+                                    </div>
+                                </div>
+                                <a href="{{url_for('edit_user', user_id=user_id)}}"> <button class='btn btn-primary'> Edit Profile</button></a>
+                                <a href="{{url_for('change_image', user_id=user_id)}}"> <button class='btn btn-primary'> Change Profile Picture</button></a>
+
+                                
+                </div>
+            </div>
+            {% else %}
+            <div class="profile-card">
+                <div class="profile-info">
+                    <h2>{{user['name']}}</h2>
+                    <div class="rating">
+                        {% if ratings %}
+                        {% for i in range(1, 6) %}
+                            {% if avg_rating >= i %}
+                                <i class="fas fa-star"></i>
+                            {% elif avg_rating > i - 1 %}
+                                <i class="fas fa-star-half-alt"></i> 
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}<br>
+                        <span> {{ avg_rating | round(1) }} / 5</span>
+                                </div>
+                        {% endif %}
+                <div class="container">
+                    <div class="row">
+                        <p> <b>Email:</b>{{user['email']}} </p> 
+                    </div>
+                    <div class="row">
+                        <p><b>Location:</b> {{user['location']}}</p>
+                    </div>
+                </div>
+                <a href="{{url_for('edit_user', user_id=user_id)}}"> <button class='btn btn-primary'> Edit Profile</button></a>
+                <a href="{{url_for('change_image', user_id=user_id)}}"> <button class='btn btn-primary'> Change Profile Picture</button></a>
+
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %} Change Image {% endblock %}
+{% block content%}
+<main class="d-inline-flex p-5 align-items-end">
+    <div class="container">
+        <h2>Edit Profile Picture</h2>
+        <form action="{{ url_for('change_image', user_id=user_id) }}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="profile_image">Upload New Profile Picture:</label>
+                <input type="file" id="profile_image" name="profile_image" accept="image/*" required>
+            </div>
+            <div class="form-group mt-3">
+                <button class="btn btn-primary" type="submit">Update Profile Picture</button>
+                <a href="{{ url_for('profile') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+
+
+{% endblock %}

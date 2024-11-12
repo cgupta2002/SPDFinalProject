@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %} Add Review {% endblock %}
+{% block content%}
+{% if user_id %}
+<main class="d-inline-flex p-5 align-items-end">
+    <div class="container">
+        <div class="row">
+            <p style="font-size:20px"> You are writing a review for: {{reviewee['name']}}</p>
+            <form method="POST" action="{{ url_for('add_review', reviewee_id=reviewee_id) }}">
+                <div class="stars">
+                    <input type="radio" id="star5" name="rating" value="5">
+                    <label for="star5">&#9733;</label>
+                    <input type="radio" id="star4" name="rating" value="4">
+                    <label for="star4">&#9733;</label>
+                    <input type="radio" id="star3" name="rating" value="3">
+                    <label for="star3">&#9733;</label>
+                    <input type="radio" id="star2" name="rating" value="2">
+                    <label for="star2">&#9733;</label>
+                    <input type="radio" id="star1" name="rating" value="1">
+                    <label for="star1">&#9733;</label>
+                </div>
+            </form><br>
+        </div>
+        <div class="row">
+            <label for="review">Description:</label><br>
+            <textarea id="review" name="review" rows="4" cols="50" required></textarea>
+        </div>
+        
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Submit Review</button>
+            </div>
+        </form>
+    </div>
+</main>
+{% else %}
+<main class="d-inline-flex p-5 align-items-end">
+  <div class="container">
+    <h2> You must be logged in to view this page.</h2>
+
+
+  </div>
+</main>
+{% endif %}
+{% endblock %}

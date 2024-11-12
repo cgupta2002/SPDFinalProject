@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %} Delete {{tool.title}}{% endblock %}
+{% block content%}
+<main class="d-inline-flex p-5 align-items-end">
+    <div class="container mt-5">
+        <p2 style="color:red; font-weight: bold;"> Are you sure you want to delete the following? </p2>
+        <div class="card">
+            <div class="card-body">
+                {% if tool.imgPath %}
+                    <img src="{{ url_for('static', filename='images/'+tool.imgPath) }}" style="height: 50px; width:50px;text-align: center;" class="card-img-top" alt="{{ tool.title }}">
+                {% endif %} 
+                <h2 class="card-title">{{ tool.title }}</h2>
+                <p class="card-text"><strong>Category:</strong> {{ tool.category }}</p>
+                <p class="card-text"><strong>Availability:</strong> {{ tool.availability }}</p>
+                <p class="card-text"><strong>Date Posted:</strong> {{ tool.datePosted }}</p>
+                <p class="card-text"><strong>Description:</strong> {{ tool.description }}</p>
+            </div>
+        </div>
+        <form id="form" action="{{url_for('del_tool', tool_id = tool_id)}}" method="POST">
+            <div class="text-center">
+                <button class='btn btn-primary' type="submit" value="Submit">Yes</button>
+                <a href="{{url_for('tool', tool_id = tool_id)}}" class="btn btn-secondary">  Cancel</a>
+            </div>  
+        </form>
+    </div>
+    </div>
+</main>
+
+{% endblock %}
