@@ -132,6 +132,19 @@ class Tool:
             conn.close()
         return m
     
+    @classmethod 
+    def getToolsForUser(cls,user_id):
+        conn = sqlite3.connect('database.db')
+        cursorObj = conn.cursor()
+        cursorObj.execute('SELECT id, user_id, title, description, imgPath, category, availability, datePosted FROM tools WHERE user_id=?;',(user_id,))
+        allRows = cursorObj.fetchall()
+        ListOfDictionaries = []
+        for row in allRows:
+            m = {"id" : row[0], "user_id": row[1], "title":row[2], 'description': row[3], 'imgPath':row[4], 'category':row[5], 'availability':row[6], 'datePosted':row[7] }
+            ListOfDictionaries.append(m)
+        if conn:
+            conn.close()
+        return ListOfDictionaries
     
 
 def InsertStartingData():

@@ -2,11 +2,11 @@
 {% block title %} {{tool.title}} - Tool Details{% endblock %}
 {% block content%}
 <main class="d-inline-flex p-5 align-items-end">
-    <div class="container mt-5">
-        <div class="card">
+    <div class="container">
+        <div class="card col-6">
             <div class="card-body">
                 {% if tool.imgPath %}
-                    <img src="{{ url_for('static', filename='images/'+tool.imgPath) }}" style="height: 50px; width:50px;text-align: center;" class="card-img-top" alt="{{ tool.title }}">
+                    <img src="{{ url_for('static', filename='images/'+tool.imgPath) }}" style="height: 200px; width: auto; object-fit: contain; display: block; margin: 0 auto;" class="card-img-top" alt="{{ tool.title }}">
                 {% endif %} 
                 <h2 class="card-title">{{ tool.title }}</h2>
                 <p class="card-text"><strong>Category:</strong> {{ tool.category }}</p>

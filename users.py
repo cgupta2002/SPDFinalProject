@@ -137,6 +137,12 @@ class User:
             if user['user_id'] == user_id:
                 return user
             
+    def getUserByName(name):
+        users = User.getAllUsers()
+        for user in users:
+            if user['name'] == name:
+                return user
+            
     @classmethod
     def getName(cls, user_id):
         users = User.getAllUsers()

@@ -3,6 +3,8 @@
 {% block content %}
 <main class="container p-5">
     <h2>Conversation with {{ receiver }}</h2>
+    <a href="{{url_for('view_profile', viewing_id=recipient.user_id)}}"> <button class="btn btn-primary">View Profile</button></a>
+
     <div class="col-8 mx-auto message-list">
         {% for message in convo %}
         <div class=" message {% if message['sender_id'] == session['user_id'] %}sent{% else %}received{% endif %}">

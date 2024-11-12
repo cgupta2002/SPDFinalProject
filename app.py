@@ -128,22 +128,25 @@ def profile():
     if ratings:
         avg_rating = sum / num_ratings
         print(ratings, avg_rating)
-    return render_template('profile.html', user=user, user_id=user_id, ratings=ratings, avg_rating=avg_rating)
+    user_tools = Tool.getToolsForUser(user_id)
+    print(user_tools)
+    return render_template('profile.html', user=user, user_id=user_id, ratings=ratings, avg_rating=avg_rating, tools=user_tools)
 
 @app.route('/profile/<int:viewing_id>')
 def view_profile(viewing_id=None):
+    print(viewing_id)
     user_id = session.get('user_id')
     user = User.getUserByID(user_id)
     viewed = User.getUserByID(viewing_id)
     ratings = Review.getReviewsForUser(viewing_id)
     sum = 0
     num_ratings = 0
+    avg_rating = 0
     for rating in ratings:
         sum += rating['rating']
         num_ratings += 1
     if ratings:
         avg_rating = sum / num_ratings
-    print(ratings, avg_rating)
     return render_template('profile.html', user=user, viewed=viewed, user_id=user_id, ratings=ratings, avg_rating=avg_rating)
 
 @app.route('/profile/<int:user_id>/edit', methods=['GET', 'POST'])
@@ -212,8 +215,9 @@ def conversation(conversation_id=None):
         receiver = User.getName(convo[0]['sender_id'])
     else:
         receiver = User.getName(convo[0]['receiver_id'])
-    print(convo)
-    return render_template('conversation.html', user_id = user_id, user=user,conversation_id=conversation_id, convo=convo, receiver=receiver)
+    recipient = User.getUserByName(receiver)
+    print(receiver, recipient)
+    return render_template('conversation.html', user_id = user_id, user=user,conversation_id=conversation_id, convo=convo, receiver=receiver, recipient=recipient)
     
 @app.route('/new_message', methods=['GET', 'POST'])
 def new_conversation():

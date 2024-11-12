@@ -4,76 +4,75 @@
 {% if viewed %}
 <main class="d-inline-flex p-5 align-items-end">
     <div class="container">
-        <div class="row">
-            <p> {{viewed['name']}}</p>
-            <div class="rating">
-                {% if ratings %}
-    {% for i in range(1, 6) %}
-        {% if avg_rating >= i %}
-            <i class="fas fa-star"></i>
-        {% elif avg_rating > i - 1 %}
-            <i class="fas fa-star-half-alt"></i> 
-        {% else %}
-            <i class="far fa-star"></i>
-        {% endif %}
-    {% endfor %}<br>
-    <span> {{ avg_rating | round(1) }} / 5</span>
-            </div>
+        <div  class="row">
+            <div class="profile-card">
+            {% if viewed['profile_image']%}
+                <div class="profile-image-container">
+                    <img src="{{url_for('static', filename='images/'+viewed['profile_image'])}}" alt="Profile Image" class="profile-image">
+                </div>
             {% endif %}
-            <div class="container">
-                <div class="row">
-                    <p> <b>Email:</b>{{user['email']}} </p> 
+                <div class="profile-info">
+                    <h2>{{viewed['name']}}</h2>
+                    <div class="container">
+                        <div class="rating">
+                            {% if ratings %}
+                            {% for i in range(1, 6) %}
+                                {% if avg_rating >= i %}
+                                    <i class="fas fa-star"></i>
+                                {% elif avg_rating > i - 1 %}
+                                    <i class="fas fa-star-half-alt"></i> 
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}<br>
+                            <span> {{ avg_rating | round(1) }} / 5</span>
+                            {% endif %}
+                        <div class="row">
+                            <p> <b>Email:</b>{{viewed['email']}} </p> 
+                        </div>
+                        <div class="row">
+                            <p><b>Location:</b> {{viewed['location']}}</p>
+                        </div>
+                        <div class="row">
+                            {% for tool in tools %}
+                            <div>
+                                <a href="{{ url_for('tool', tool_id=tool.id) }}" class="text-decoration-none text-dark">
+                                <div class="card h-100">
+                                    
+                                    <div class="card-body">
+                                        {% if tool.imgPath %}
+                                        <img src="{{ url_for('static', filename='images/'+tool.imgPath) }}" style="height: 100px; width: auto; object-fit: contain; display: block; margin: 0 auto;" class="card-img-top" alt="{{ tool.title }}">
+                                        {% endif %} 
+                                        <h5 class="card-title">{{ tool.title }}</h5>
+                                        <p class="card-text">
+                                            <strong>Category:</strong> {{ tool.category }}<br>
+                                            <strong>Availability:</strong> {{ tool.availability }}<br>
+                                            <strong>Date Posted:</strong> {{ tool.datePosted }}
+                                        </p>
+                                        <p class="card-text">
+                                            {{ tool.description}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-                <div class="row">
-                    <p><b>Location:</b> {{user['location']}}</p>
-                </div>
-            </div>  
-        </div>
-    </div>
+            </div>
 </main>
 
 {% else %}
 <main class="d-inline-flex p-5 align-items-end">
-    <div class="container">
-        <div  class="row">
-            {% if user['profile_image']%}
+    <div class="container col-8">
+        <div class="row">
             <div class="profile-card">
+            {% if user['profile_image']%}
                 <div class="profile-image-container">
                     <img src="{{url_for('static', filename='images/'+user['profile_image'])}}" alt="Profile Image" class="profile-image">
                 </div>
-                <div class="profile-info">
-                    <h2>{{user['name']}}</h2>
-                    
-                    <div class="rating">
-                        {% if ratings %}
-                        {% for i in range(1, 6) %}
-                            {% if avg_rating >= i %}
-                                <i class="fas fa-star"></i>
-                            {% elif avg_rating > i - 1 %}
-                                <i class="fas fa-star-half-alt"></i> 
-                            {% else %}
-                                <i class="far fa-star"></i>
-                            {% endif %}
-                        {% endfor %}<br>
-                        <span> {{ avg_rating | round(1) }} / 5</span>
-                        {% endif %}
-                                </div>
-                                <div class="container">
-                                    <div class="row">
-                                        <p> <b>Email:</b>{{user['email']}} </p> 
-                                    </div>
-                                    <div class="row">
-                                        <p><b>Location:</b> {{user['location']}}</p>
-                                    </div>
-                                </div>
-                                <a href="{{url_for('edit_user', user_id=user_id)}}"> <button class='btn btn-primary'> Edit Profile</button></a>
-                                <a href="{{url_for('change_image', user_id=user_id)}}"> <button class='btn btn-primary'> Change Profile Picture</button></a>
-
-                                
-                </div>
-            </div>
-            {% else %}
-            <div class="profile-card">
+            {% endif %}
                 <div class="profile-info">
                     <h2>{{user['name']}}</h2>
                     <div class="rating">
@@ -97,7 +96,33 @@
                     <div class="row">
                         <p><b>Location:</b> {{user['location']}}</p>
                     </div>
+                    <div class="row justify-content-center">
+                    {% for tool in tools %}
+                    <div class="col-md-3">
+                        <a href="{{ url_for('tool', tool_id=tool.id) }}" class="text-decoration-none text-dark">
+                        <div class="card h-100">
+                            
+                            <div class="card-body">
+                                {% if tool.imgPath %}
+                                <img src="{{ url_for('static', filename='images/'+tool.imgPath) }}" style="height: 100px; width: auto; object-fit: contain; display: block; margin: 0 auto;" class="card-img-top" alt="{{ tool.title }}">
+                                {% endif %} 
+                                <h5 class="card-title">{{ tool.title }}</h5>
+                                <p class="card-text" style="text-align: left;">
+                                    <strong>Category:</strong> {{ tool.category }}<br>
+                                    <strong>Availability:</strong> {{ tool.availability }}<br>
+                                    <strong>Date Posted:</strong> {{ tool.datePosted }}
+                                </p>
+                                <p class="card-text">
+                                    {{ tool.description}}
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                    </div>
+                    {% endfor %}
                 </div>
+                </div>
+                <br>
                 <a href="{{url_for('edit_user', user_id=user_id)}}"> <button class='btn btn-primary'> Edit Profile</button></a>
                 <a href="{{url_for('change_image', user_id=user_id)}}"> <button class='btn btn-primary'> Change Profile Picture</button></a>
 
@@ -107,5 +132,4 @@
         </div>
     </div>
 </main>
-{% endif %}
 {% endblock %}

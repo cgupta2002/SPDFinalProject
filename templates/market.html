@@ -11,7 +11,7 @@
                     
                     <div class="card-body">
                         {% if tool.imgPath %}
-                        <img src="{{ url_for('static', filename='images/'+tool.imgPath) }}" style="height: 50px; width:50px;text-align: center;" class="card-img-top" alt="{{ tool.title }}">
+                        <img src="{{ url_for('static', filename='images/'+tool.imgPath) }}" style="height: 100px; width: auto; object-fit: contain; display: block; margin: 0 auto;" class="card-img-top" alt="{{ tool.title }}">
                         {% endif %} 
                         <h5 class="card-title">{{ tool.title }}</h5>
                         <p class="card-text">
