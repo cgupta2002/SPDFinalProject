@@ -110,7 +110,7 @@ def InsertStartingData():
     review_data = [
         ( 1, 2, 5, 'Great exchange experience!', '2023-01-16'),
         ( 2, 1, 4, 'Items were as described, smooth process.', '2023-01-17')]
-    cur.executemany('''INSERT INTO reviews (user_id, reviewer_id, rating, content, timestamp) VALUES (?, ?, ?, ?, ?, ?)''', review_data)
+    cur.executemany('''INSERT INTO reviews (user_id, reviewer_id, rating, content, timestamp) VALUES (?, ?, ?, ?, ?)''', review_data)
     conn.commit()
     conn.close()
 
@@ -123,6 +123,6 @@ def createReviewTable():
 
 
 if __name__ == '__main__':
-    # createReviewTable()
-    # InsertStartingData()
+    #createReviewTable()
+    #InsertStartingData()
     print(Review.getAllReviews())

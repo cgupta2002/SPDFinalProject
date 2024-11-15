@@ -166,6 +166,6 @@ def createToolTable():
 
 
 if __name__ == '__main__':
-    createToolTable()
-    InsertStartingData()
+    #createToolTable()
+    #InsertStartingData()
     print(Tool.getAllTools())

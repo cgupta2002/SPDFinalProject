@@ -177,8 +177,8 @@ def create_convo_table():
 
 
 if __name__ == '__main__':
-   create_message_table()
-   create_convo_table()
+   #create_message_table()
+   #create_convo_table()
    print(Message.get_all_messages())
    print(Conversation.get_user_conversations(1))
     
